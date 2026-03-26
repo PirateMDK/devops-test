@@ -1,0 +1,39 @@
+stages:
+  - build
+  - test
+
+build-backend:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  script:
+    - echo "Build de l'image backend..."
+    - docker build -t devops-backend ./backend
+    - echo "Backend buildé avec succès !"
+
+build-frontend:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  script:
+    - echo "Build de l'image frontend..."
+    - docker build -t devops-frontend ./frontend
+    - echo "Frontend buildé avec succès !"
+
+test-backend:
+  stage: test
+  image: node:18-alpine
+  script:
+    - echo "Test du backend..."
+    - cd backend && npm install
+    - echo "Backend OK !"
+
+test-frontend:
+  stage: test
+  image: node:18-alpine
+  script:
+    - echo "Test du frontend..."
+    - cd frontend && npm install
+    - echo "Frontend OK !"
